@@ -27,6 +27,7 @@ describe("Main Contract Testing", () => {
     expect(await this.tokenContract.name()).to.equal('ACSR Token');
     expect(await this.tokenContract.symbol()).to.equal('ACSR');
     expect(await this.tokenContract.totalSupply()).to.equal('5000000000000000000000000000');
+    expect(await this.tokenContract.decimals()).to.equal(18);
   });
 
   it("Balance of the Owner should be the total supply", async function () {
@@ -137,6 +138,13 @@ describe("Main Contract Testing", () => {
 
     await expect(this.user1Contract.transfer(this.user2.address, 100))
       .to.be.revertedWith('Sender address in blacklist');
+  });
+
+  it("Unblock Blacklisted Accounts", async function () {
+    await this.tokenContract.blacklistAccount(this.user1.address, false);
+
+    const user1Status = await this.tokenContract.isBlacklisted(this.user1.address);
+    expect(user1Status).to.equal(false);
   });
 
   it("Should emit Transfer event on successful transfer", async function () {
