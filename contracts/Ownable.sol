@@ -9,9 +9,9 @@ contract Ownable {
     event OwnerAdded(address indexed newOwner);
     event OwnerRemoved(address indexed removedOwner);
 
-    constructor () {
-        _owners[msg.sender] = true;
-        emit OwnerAdded(msg.sender);
+    constructor (address owner_) {
+        _owners[owner_] = true;
+        emit OwnerAdded(owner_);
     }
 
     modifier onlyOwner() {

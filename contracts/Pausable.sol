@@ -4,6 +4,10 @@ pragma solidity =0.8.12;
 import "./Ownable.sol";
 
 contract Pausable is Ownable {
+
+    constructor(address owner_) Ownable(owner_) {
+    }
+
     event Pause();
     event Unpause();
 

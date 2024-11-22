@@ -4,9 +4,12 @@ pragma solidity =0.8.12;
 import "./IERC20.sol";
 import "./Ownable.sol";
 import "./Pausable.sol";
-import "./BlackList.sol";
 
-contract ERC20 is IERC20, BlackList, Pausable {
+contract ERC20 is IERC20, Pausable {
+
+    constructor(address owner_) Pausable(owner_){
+    }
+
     mapping (address => uint256) _balances;
 
     mapping (address => mapping (address => uint256)) _allowed;
@@ -26,8 +29,8 @@ contract ERC20 is IERC20, BlackList, Pausable {
     }
 
     function approve(address spender, uint256 value) external returns (bool) {
-        require(spender != address(0));
-        require(msg.sender != address(0));
+        require(spender != address(0), 'Spender zero address prohibited');
+        require(msg.sender != address(0), 'Zero address could not call method');
 
         _allowed[msg.sender][spender] = value;
         emit Approval(msg.sender, spender, value);
@@ -78,8 +81,6 @@ contract ERC20 is IERC20, BlackList, Pausable {
     }
 
     function _transfer(address from, address to, uint256 value) internal whenNotPaused {
-        require(!isBlacklisted(from), 'Sender address in blacklist');
-        require(!isBlacklisted(to), 'Receiver address in blacklist');
         require(to != address(0), 'Zero address can not be receiver');
 
         _balances[from] -= value;
@@ -88,7 +89,7 @@ contract ERC20 is IERC20, BlackList, Pausable {
     }
 
     function _mint(address account, uint256 value) internal {
-        require(account != address(0));
+        require(account != address(0), 'Minting can not be done on Zero address');
 
         _totalSupply += value;
         _balances[account] += value;
@@ -100,18 +101,11 @@ contract ERC20 is IERC20, BlackList, Pausable {
     }
 
     function _burn(address account, uint256 value) internal {
-        require(account != address(0));
+        require(account != address(0), 'Burning can not be performed on Zero address');
 
         _totalSupply -= value;
         _balances[account] -= value;
         emit Transfer(account, address(0), value);
     }
 
-    function destroyBlackFunds (address _blackListedUser) external onlyOwner  {
-        require(isBlacklisted(_blackListedUser), 'Address is not in blacklist');
-        uint dirtyFunds = _balances[_blackListedUser];
-        _balances[_blackListedUser] = 0;
-        _totalSupply -= dirtyFunds;
-        emit DestroyedBlackFunds(_blackListedUser, dirtyFunds);
-    }
 }
