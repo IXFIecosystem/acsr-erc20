@@ -13,12 +13,13 @@ contract ERC20Detailed is ERC20 {
         string memory name_,
         string memory symbol_,
         uint8 decimals_,
-        uint256 totalSupply
-    )  {
+        uint256 totalSupply,
+        address owner_
+    ) ERC20(owner_) {
         _name = name_;
         _symbol = symbol_;
         _decimals = decimals_;
-        _mint(msg.sender, totalSupply);
+        _mint(owner_, totalSupply);
     }
 
     function name() external view returns (string memory) {
