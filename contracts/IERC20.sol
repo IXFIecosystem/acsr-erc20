@@ -25,9 +25,4 @@ interface IERC20 {
         address indexed spender,
         uint256 value
     );
-
-    event DestroyedBlackFunds(
-        address indexed blackListedUser,
-        uint balance
-    );
 }

@@ -3,11 +3,10 @@ pragma solidity =0.8.12;
 
 import "./IERC20.sol";
 import "./Ownable.sol";
-import "./Pausable.sol";
 
-contract ERC20 is IERC20, Pausable {
+contract ERC20 is IERC20, Ownable {
 
-    constructor(address owner_) Pausable(owner_){
+    constructor(address owner_) Ownable(owner_){
     }
 
     mapping (address => uint256) _balances;
@@ -80,7 +79,7 @@ contract ERC20 is IERC20, Pausable {
         return true;
     }
 
-    function _transfer(address from, address to, uint256 value) internal whenNotPaused {
+    function _transfer(address from, address to, uint256 value) internal {
         require(to != address(0), 'Zero address can not be receiver');
 
         _balances[from] -= value;
