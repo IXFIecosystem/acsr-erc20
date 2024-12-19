@@ -1,4 +1,4 @@
-# ACSR Token Project
+# IXFI Token Project
 
 This project is a custom ERC20 token contract implemented in Solidity, with additional features for ownership management through the `Ownable` contract. It includes functionality such as transfer, minting, burning, and management of blacklisted accounts. This README file will guide you on how to set up the project, compile the contracts, run test cases.
 
